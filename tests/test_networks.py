@@ -104,11 +104,11 @@ except ImportError:
         'file://localhost/foo/bar',
     ],
 )
-def test_any_url_success(value):
+def test_any_url_success(value: str) -> None:
     class Model(BaseModel):
         v: AnyUrl
 
-    assert Model(v=value).v, value
+    assert Model.model_validate({'v': value}).v, value
 
 
 @pytest.mark.parametrize(
@@ -152,17 +152,17 @@ def test_any_url_invalid(value, err_type, err_msg):
     assert {'type': error['type'], 'msg': error['msg']} == {'type': err_type, 'msg': err_msg}
 
 
-def validate_url(s):
+def validate_url(s: str):
     class Model(BaseModel):
         v: AnyUrl
 
-    return Model(v=s).v
+    return Model.model_validate({'v': s}).v
 
 
 def test_any_url_parts():
     url = validate_url('http://example.org')
     assert str(url) == 'http://example.org/'
-    assert repr(url) == "Url('http://example.org/')"
+    assert repr(url) == "AnyUrl('http://example.org/')"
     assert url.scheme == 'http'
     assert url.host == 'example.org'
     assert url.port == 80
@@ -171,7 +171,7 @@ def test_any_url_parts():
 def test_url_repr():
     url = validate_url('http://user:password@example.org:1234/the/path/?query=here#fragment=is;this=bit')
     assert str(url) == 'http://user:password@example.org:1234/the/path/?query=here#fragment=is;this=bit'
-    assert repr(url) == "Url('http://user:password@example.org:1234/the/path/?query=here#fragment=is;this=bit')"
+    assert repr(url) == "AnyUrl('http://user:password@example.org:1234/the/path/?query=here#fragment=is;this=bit')"
     assert url.scheme == 'http'
     assert url.username == 'user'
     assert url.password == 'password'

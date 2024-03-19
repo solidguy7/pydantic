@@ -164,7 +164,7 @@ class Navbar:
 
 navbar = Navbar(button={'href': 'https://example.com'})
 print(navbar)
-#> Navbar(button=NavbarButton(href=Url('https://example.com/')))
+#> Navbar(button=NavbarButton(href=AnyUrl('https://example.com/')))
 ```
 
 When used as fields, dataclasses (Pydantic or vanilla) should use dicts as validation inputs.
